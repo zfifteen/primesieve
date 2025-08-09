@@ -1,8 +1,10 @@
-# Z Framework Prime Generator
+# Z Framework Prime Generator (Experimental)
 
 ## Overview
 
-The Z Framework is a novel C-based prime number generator that leverages advanced mathematical concepts to enhance prime generation performance and accuracy. It implements a **frame shift residue method** combined with **golden ratio geometric transformations** and **modular arithmetic principles**.
+⚠️ **Performance Notice**: This is an experimental implementation that is significantly slower than standard primesieve. It is intended for educational and research purposes only.
+
+The Z Framework explores alternative mathematical approaches to prime generation using **frame shift residue methods** and **golden ratio geometric transformations**. While mathematically interesting, it does not provide performance improvements over standard algorithms.
 
 ## Key Features
 
@@ -165,30 +167,39 @@ This eliminates numbers divisible by 2, 3, or 5 before sieving.
 
 ### Complexity
 - **Time complexity**: O(n log log n) - same as Sieve of Eratosthenes
-- **Space complexity**: O(√n) for sieving primes
-- **Enhancement overhead**: Minimal geometric calculation cost
+- **Space complexity**: O(√n) for sieving primes  
+- **Enhancement overhead**: Geometric calculations add minimal cost
 
 ### Benchmark Results
 
-| Range | Standard primesieve | Z Framework | Accuracy |
-|-------|-------------------|-------------|----------|
-| [1, 10³] | 168 primes | 168 primes | ✓ 100% |
-| [1, 10⁴] | 1,229 primes | 1,229 primes | ✓ 100% |
-| [1, 10⁵] | 9,592 primes | 9,592 primes | ✓ 100% |
-| [10⁶, 1.1×10⁶] | 7,216 primes | 7,216 primes | ✓ 100% |
+**⚠️ Performance Reality**: Z Framework is significantly slower than standard primesieve:
+
+| Range | Standard Primesieve | Z Framework | Performance Ratio |
+|-------|-------------------|-------------|------------------|
+| [1, 10⁴] | 0.000019s | 0.000053s | **2.8x slower** |
+| [1, 10⁵] | 0.000023s | 0.000517s | **22.6x slower** |
+| [100K, 200K] | 0.000027s | 0.000747s | **27.7x slower** |
+| [1M, 1.1M] | 0.000032s | 0.000835s | **26.1x slower** |
+
+The performance difference is due to:
+- Z Framework uses basic mod 30 wheel vs primesieve's optimized mod 210 wheel
+- No SIMD optimization vs primesieve's AVX512 acceleration
+- Additional geometric calculations with minimal benefit
 
 ### Parameter Effects
 
 **Curvature Parameter k:**
-- k = 0.1: More conservative, slightly fewer false positives
-- k = 0.3: Optimal balance (default)
-- k = 0.7: More aggressive, faster but potentially less precise
+- k = 0.1: Minimal effect on performance
+- k = 0.3: Default setting  
+- k = 0.7: Minimal effect on performance
 
 **Golden Ratio Enhancement:**
 - 1.0: No enhancement
-- φ (1.618): Standard golden ratio enhancement
-- φ² (2.618): Enhanced geometric scaling
-- 2φ (3.236): Maximum enhancement
+- φ (1.618): Minimal performance difference (< 5%)
+- φ² (2.618): Minimal performance difference (< 5%)  
+- 2φ (3.236): Minimal performance difference (< 5%)
+
+**Note**: Golden ratio enhancements provide negligible performance benefits in practice.
 
 ## Building and Testing
 
@@ -239,10 +250,11 @@ Z Framework functions follow standard C conventions:
 
 ## Limitations
 
-1. **Single-threaded**: Each generator instance is single-threaded
-2. **Memory usage**: Requires O(range) memory for large ranges
-3. **Large ranges**: Performance degrades for very large ranges (>10⁹)
-4. **Precision**: Geometric enhancements may introduce minor variations
+1. **Performance**: Significantly slower than optimized primesieve (2-27x slower)
+2. **Single-threaded**: Each generator instance is single-threaded
+3. **Memory usage**: Requires O(range) memory for large ranges
+4. **Limited optimization**: Uses basic mod 30 wheel without SIMD acceleration
+5. **Mathematical justification**: Golden ratio formulas lack rigorous theoretical basis
 
 ## Future Enhancements
 
@@ -260,4 +272,4 @@ Z Framework functions follow standard C conventions:
 
 ---
 
-*The Z Framework represents an innovative approach to prime generation, combining classical algorithms with modern mathematical insights for enhanced performance and accuracy.*
+*The Z Framework is an experimental exploration of alternative prime generation approaches, intended for educational and research purposes. For production use, standard primesieve provides significantly better performance.*

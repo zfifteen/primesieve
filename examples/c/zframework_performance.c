@@ -1,5 +1,6 @@
 /** @example zframework_performance.c
- *  Performance comparison between Z Framework and standard primesieve. */
+ *  Performance comparison between Z Framework and standard primesieve.
+ *  Note: Z Framework is significantly slower and intended for educational use only. */
 
 #include <primesieve/zframework.h>
 #include <primesieve.h>
@@ -147,6 +148,8 @@ void validate_correctness() {
 int main(int argc, char** argv) {
   printf("Z Framework Performance Analysis\n");
   printf("================================\n\n");
+  printf("⚠️  NOTICE: Z Framework is experimental and significantly slower than primesieve.\n");
+  printf("    This analysis is for educational/research purposes only.\n\n");
   
   validate_correctness();
   

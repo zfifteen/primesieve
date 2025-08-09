@@ -1,14 +1,15 @@
 /**
  * @file   zframework.cpp
- * @brief  Implementation of Z Framework prime number generator using
- *         frame shift residue method with golden ratio optimization.
+ * @brief  Implementation of Z Framework experimental prime number generator.
  *
- * The Z Framework implements a novel approach to prime generation that
- * combines:
- * 1. Frame shift methodology for segment optimization
+ * The Z Framework explores alternative approaches to prime generation using:
+ * 1. Frame shift methodology for segment processing
  * 2. Residue class filtering based on modular arithmetic
- * 3. Golden ratio spacing for enhanced prime density detection
+ * 3. Golden ratio spacing experiments (minimal practical benefit)
  * 4. Curvature parameter k=0.3 for geometric transformations
+ *
+ * Note: This implementation is significantly slower than standard primesieve
+ * and is intended for educational/research purposes only.
  *
  * Copyright (C) 2025 Kim Walisch, <kim.walisch@gmail.com>
  * 

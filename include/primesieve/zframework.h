@@ -1,9 +1,8 @@
 /**
  * @file   zframework.h
- * @brief  Z Framework prime number generator using frame shift residue method.
- *         This implementation leverages geometric transformations and modular
- *         arithmetic principles with golden ratio enhancement for improved
- *         prime density detection.
+ * @brief  Z Framework experimental prime number generator using frame shift residue method.
+ *         This implementation explores alternative mathematical approaches but is
+ *         significantly slower than standard primesieve. Intended for educational use.
  * 
  * Copyright (C) 2025 Kim Walisch, <kim.walisch@gmail.com>
  * 
