@@ -209,6 +209,37 @@ int main()
 
 * [C++ API documentation](doc/CPP_API.md)
 
+## Experimental Implementations
+
+### Z Framework
+
+This repository includes the **Z Framework**, an experimental prime generation implementation that explores alternative mathematical approaches using frame shift residue methods and golden ratio transformations.
+
+⚠️ **Performance Note**: Comprehensive benchmarking shows that **standard primesieve is 37x faster on average** than the Z Framework. The Z Framework is provided for educational and research purposes rather than production use.
+
+* [Z Framework Documentation](doc/ZFRAMEWORK.md)
+* [Comprehensive Performance Report](doc/ZFRAMEWORK_PERFORMANCE_REPORT.md)
+* [Quick Performance Test](scripts/test_zframework_performance.sh)
+
+**Usage:**
+```c
+#include <primesieve/zframework.h>
+
+// Basic usage
+uint64_t count = zframework_count_primes(1, 100000);
+size_t num_primes;
+uint64_t* primes = zframework_generate_primes(1, 1000, &num_primes);
+```
+
+**Recommended for:**
+- Educational purposes and algorithm learning
+- Mathematical research and experimentation  
+- Very small prime ranges (≤1,000 numbers)
+
+**Not recommended for:**
+- Production applications requiring performance
+- Large-scale prime generation
+
 ## Bindings for other languages
 
 primesieve natively supports C and C++ and has bindings available for:

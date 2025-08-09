@@ -20,6 +20,7 @@
 #define PRIMESIEVE_VERSION_MINOR 10
 
 #include <primesieve/iterator.h>
+#include <primesieve/zframework.h>
 
 #include <stdint.h>
 #include <stddef.h>

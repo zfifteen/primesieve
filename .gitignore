@@ -25,3 +25,8 @@ doc/Doxyfile
 doc/html
 doc/latex
 /build*
+
+# Z Framework test executables
+test_zframework
+zframework_performance
+debug_zf
