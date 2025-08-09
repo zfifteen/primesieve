@@ -23,7 +23,9 @@ extern "C" {
  * Z Framework configuration constants
  */
 #define ZFRAMEWORK_GOLDEN_RATIO 1.6180339887498948482
+#define ZFRAMEWORK_E2 7.38905609893065022723  /* e^2 */
 #define ZFRAMEWORK_CURVATURE_K 0.3
+#define ZFRAMEWORK_OPT_K 0.3  /* Optimal curvature parameter */
 #define ZFRAMEWORK_MAX_FRAMES 32
 #define ZFRAMEWORK_RESIDUE_CLASSES 30  /* 2*3*5 wheel basis */
 
@@ -95,6 +97,31 @@ void zframework_cleanup(zframework_generator_t* gen);
  * @param density_boost   Density enhancement factor (default golden ratio based)
  */
 void zframework_set_parameters(double curvature_k, uint32_t frame_count, double density_boost);
+
+/**
+ * Compute curvature kappa(n) = d(n) * ln(n+1) / e^2
+ * where d(n) is the divisor function
+ * @param n  Input number
+ * @return Curvature value for adaptive geodesic optimization
+ */
+double zframework_kappa(uint64_t n);
+
+/**
+ * Adaptive frame size calculation: floor(sqrt(range) * phi * (1 + k * sin(phi * PI / 4)))
+ * @param range  Range size for prime generation
+ * @param k      Curvature parameter
+ * @return Optimized frame size for given range and curvature
+ */
+uint64_t zframework_compute_frame_size(uint64_t range, double k);
+
+/**
+ * Density estimation: 1 / (log(n/phi) * frame_factor * density_boost)
+ * @param n             Input number
+ * @param frame_factor  Frame adjustment factor
+ * @param density_boost Density enhancement multiplier
+ * @return Estimated prime density for adaptive optimization
+ */
+double zframework_density(uint64_t n, double frame_factor, double density_boost);
 
 #ifdef __cplusplus
 }

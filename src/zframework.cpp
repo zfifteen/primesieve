@@ -33,21 +33,10 @@ static const uint8_t residue_classes_30[] = {
 };
 
 /**
- * Calculate optimal frame size based on golden ratio and range.
+ * Calculate optimal frame size based on adaptive geodesic optimization.
  */
 static uint64_t calculate_frame_size(uint64_t range) {
-  double ratio = ZFRAMEWORK_GOLDEN_RATIO;
-  uint64_t base_size = (uint64_t)(std::sqrt(range) * ratio);
-  
-  /* Apply curvature adjustment */
-  double curvature_factor = 1.0 + g_curvature_k * std::sin(ratio * M_PI / 4);
-  base_size = (uint64_t)(base_size * curvature_factor);
-  
-  /* Ensure minimum frame size */
-  if (base_size < 1024) base_size = 1024;
-  
-  /* Align to cache-friendly size */
-  return (base_size + 63) & ~63ULL;
+  return zframework_compute_frame_size(range, g_curvature_k);
 }
 
 /**
@@ -60,16 +49,14 @@ static uint64_t calculate_frame_shift(uint32_t frame_index) {
 }
 
 /**
- * Apply geometric transformation for prime density enhancement.
+ * Apply adaptive geodesic transformation for prime density enhancement.
  */
 static double apply_geometric_transform(uint64_t n, uint64_t frame_offset) {
   double phi = ZFRAMEWORK_GOLDEN_RATIO;
-  double x = (double)n / phi;
   double frame_factor = 1.0 + g_curvature_k * std::cos(frame_offset * M_PI / phi);
   
-  /* Prime density approximation with golden ratio enhancement */
-  double density = 1.0 / (std::log(x) * frame_factor * g_density_boost);
-  return density;
+  /* Use adaptive density estimation with geodesic optimization */
+  return zframework_density(n, frame_factor, g_density_boost);
 }
 
 /**
@@ -314,4 +301,69 @@ void zframework_set_parameters(double curvature_k, uint32_t frame_count, double 
   if (density_boost > 0.0) {
     g_density_boost = density_boost;
   }
+}
+
+/**
+ * Count divisors of n using trial division.
+ * This is the d(n) divisor function used in curvature calculation.
+ */
+static uint64_t count_divisors(uint64_t n) {
+  if (n == 0) return 0;
+  if (n == 1) return 1;
+  
+  uint64_t count = 0;
+  uint64_t sqrt_n = (uint64_t)std::sqrt(n);
+  
+  for (uint64_t i = 1; i <= sqrt_n; i++) {
+    if (n % i == 0) {
+      count++;
+      if (i != n / i) {
+        count++;
+      }
+    }
+  }
+  
+  return count;
+}
+
+double zframework_kappa(uint64_t n) {
+  if (n == 0) return 0.0;
+  
+  uint64_t d_n = count_divisors(n);
+  double ln_n_plus_1 = std::log(n + 1);
+  
+  return (double)d_n * ln_n_plus_1 / ZFRAMEWORK_E2;
+}
+
+uint64_t zframework_compute_frame_size(uint64_t range, double k) {
+  if (range == 0) return 1024;
+  
+  double phi = ZFRAMEWORK_GOLDEN_RATIO;
+  double base_size = std::sqrt(range) * phi;
+  
+  /* Apply adaptive curvature adjustment: (1 + k * sin(phi * PI / 4)) */
+  double curvature_factor = 1.0 + k * std::sin(phi * M_PI / 4.0);
+  uint64_t frame_size = (uint64_t)(base_size * curvature_factor);
+  
+  /* Ensure minimum frame size */
+  if (frame_size < 1024) frame_size = 1024;
+  
+  /* Align to cache-friendly size (64-byte boundary) */
+  return (frame_size + 63) & ~63ULL;
+}
+
+double zframework_density(uint64_t n, double frame_factor, double density_boost) {
+  if (n <= 1) return 0.0;
+  
+  double phi = ZFRAMEWORK_GOLDEN_RATIO;
+  double x = (double)n / phi;
+  
+  /* Prevent log(0) or negative values */
+  if (x <= 1.0) x = 2.0;
+  
+  double log_x = std::log(x);
+  if (log_x <= 0.0) log_x = 1.0;
+  
+  /* Density estimation: 1 / (log(n/phi) * frame_factor * density_boost) */
+  return 1.0 / (log_x * frame_factor * density_boost);
 }

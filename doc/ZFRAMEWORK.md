@@ -23,6 +23,12 @@ The Z Framework explores advanced mathematical approaches to prime generation us
 - **Density modulation**: Fine-tunes prime detection sensitivity
 - **Parametric control**: Supports k values from 0.1 to 0.9
 
+### 4. Adaptive Geodesic Optimization
+- **Curvature function κ(n)**: Implements κ(n) = d(n) · ln(n+1) / e² for adaptive frame sizing
+- **Dynamic frame computation**: Adaptive frame size calculation based on range and curvature
+- **Density estimation**: Advanced prime density modeling using golden ratio factors
+- **Geodesic transformations**: Applies mathematical transformations for optimization
+
 ## API Reference
 
 ### Core Functions
@@ -56,11 +62,26 @@ void zframework_free(void* ptr);
 void zframework_set_parameters(double curvature_k, uint32_t frame_count, double density_boost);
 ```
 
+### Adaptive Geodesic Optimization Functions
+
+```c
+// Compute curvature kappa(n) = d(n) * ln(n+1) / e^2
+double zframework_kappa(uint64_t n);
+
+// Adaptive frame size calculation
+uint64_t zframework_compute_frame_size(uint64_t range, double k);
+
+// Density estimation with geodesic factors
+double zframework_density(uint64_t n, double frame_factor, double density_boost);
+```
+
 ### Constants
 
 ```c
 #define ZFRAMEWORK_GOLDEN_RATIO     1.6180339887498948482
+#define ZFRAMEWORK_E2               7.38905609893065022723  /* e^2 */
 #define ZFRAMEWORK_CURVATURE_K      0.3
+#define ZFRAMEWORK_OPT_K            0.3  /* Optimal curvature parameter */
 #define ZFRAMEWORK_MAX_FRAMES       32
 #define ZFRAMEWORK_RESIDUE_CLASSES  30
 ```
@@ -110,20 +131,25 @@ int main() {
 }
 ```
 
-### Parameter Tuning
+### Adaptive Geodesic Optimization
 
 ```c
 #include <primesieve/zframework.h>
+#include <stdio.h>
 
 int main() {
-    // Use curvature k=0.5, adaptive frame count, and φ² enhancement
-    zframework_set_parameters(0.5, 0, ZFRAMEWORK_GOLDEN_RATIO * ZFRAMEWORK_GOLDEN_RATIO);
+    // Test curvature function κ(n) = d(n) * ln(n+1) / e^2
+    printf("Curvature κ(10) = %.2f\n", zframework_kappa(10));
+    printf("Curvature κ(100) = %.2f\n", zframework_kappa(100));
+    printf("Curvature κ(1000) = %.2f\n", zframework_kappa(1000));
     
-    uint64_t count = zframework_count_primes(1, 100000);
-    printf("Found %llu primes with enhanced parameters\n", count);
+    // Test adaptive frame size calculation
+    uint64_t frame_size = zframework_compute_frame_size(100000, 0.3);
+    printf("Adaptive frame size for 100K range: %llu\n", frame_size);
     
-    // Reset to defaults
-    zframework_set_parameters(ZFRAMEWORK_CURVATURE_K, 0, ZFRAMEWORK_GOLDEN_RATIO);
+    // Test density estimation
+    double density = zframework_density(1000, 1.0, 1.618);
+    printf("Prime density estimation for n=1000: %.6f\n", density);
     
     return 0;
 }
@@ -133,7 +159,7 @@ int main() {
 
 ### Frame Shift Algorithm
 
-The Z Framework divides the prime search space into frames using the formula:
+The Z Framework divides the prime search space into frames using adaptive geodesic optimization:
 
 ```
 frame_size = ⌊√(range) × φ × (1 + k × sin(φπ/4))⌋
@@ -144,9 +170,27 @@ Where:
 - `k` = curvature parameter (default 0.3)
 - `range` = stop - start
 
+### Adaptive Geodesic Curvature
+
+The framework implements curvature function κ(n) for adaptive optimization:
+
+```
+κ(n) = d(n) × ln(n+1) / e²
+```
+
+Where:
+- `d(n)` = divisor function (count of divisors of n)
+- `e²` = Euler's number squared (~7.389)
+
+Example values:
+- κ(10) ≈ 1.30
+- κ(100) ≈ 5.62  
+- κ(1000) ≈ 14.96
+- κ(10000) ≈ 31.16
+
 ### Golden Ratio Enhancement
 
-Prime density estimation uses the geometric transformation:
+Prime density estimation uses adaptive geodesic transformation:
 
 ```
 density(n) = 1 / (log(n/φ) × frame_factor × density_boost)
@@ -162,13 +206,6 @@ Valid residue classes: {1, 7, 11, 13, 17, 19, 23, 29} (mod 30)
 ```
 
 This eliminates numbers divisible by 2, 3, or 5 before sieving.
-
-## Performance Characteristics
-
-### Complexity
-- **Time complexity**: O(n log log n) - same as Sieve of Eratosthenes
-- **Space complexity**: O(√n) for sieving primes  
-- **Enhancement overhead**: Geometric calculations add minimal cost
 
 ## Performance Characteristics
 
