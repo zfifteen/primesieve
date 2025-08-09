@@ -2,9 +2,9 @@
 
 ## Overview
 
-🚀 **Performance Advantage**: Z Framework demonstrates significant performance improvements over standard primesieve, achieving up to 25x faster execution on single-threaded workloads for mid-sized ranges (≤ 10⁹).
+⚠️ **Performance Analysis**: Comprehensive benchmarking reveals that standard primesieve significantly outperforms Z Framework, with standard primesieve being **37x faster on average** across tested ranges. Z Framework shows minor advantages only on very small ranges (≤1K primes).
 
-The Z Framework explores advanced mathematical approaches to prime generation using **frame shift residue methods** and **golden ratio geometric transformations**. Through innovative sieve-frame techniques and optimized filtering, it provides substantial performance gains over traditional segmented Eratosthenes implementations.
+The Z Framework explores advanced mathematical approaches to prime generation using **frame shift residue methods** and **golden ratio geometric transformations**. While the implementation demonstrates innovative mathematical concepts, it serves primarily as an educational and experimental implementation rather than a performance-optimized replacement for primesieve.
 
 ## Key Features
 
@@ -172,21 +172,25 @@ This eliminates numbers divisible by 2, 3, or 5 before sieving.
 
 ### Benchmark Results
 
-🚀 **Performance Superiority**: Z Framework significantly outperforms standard primesieve on single-threaded workloads:
+📊 **Comprehensive Performance Analysis**: Extensive testing reveals standard primesieve's significant performance superiority:
 
-| Range Size (N) | Z Framework Time (s) | Primesieve Time (s) | Performance Ratio |
-|----------------|---------------------|-------------------|------------------|
-| 10,000,000 | 0.0182 | 0.4556 | **25.0x faster** |
-| 100,000,000 | 0.2341 | 5.8521 | **25.0x faster** |
-| 1,000,000,000 | 2.9325 | 73.4723 | **25.1x faster** |
+| Range Size | Standard Time (s) | Z Framework Time (s) | Performance Ratio |
+|------------|-------------------|---------------------|-------------------|
+| 1-1,000 | 0.000014 | 0.000004 | **Z Framework 3.5x faster** |
+| 1-10,000 | 0.000015 | 0.000042 | **Standard 2.8x faster** |
+| 1-100,000 | 0.000018 | 0.000439 | **Standard 24.9x faster** |
+| 1-1,000,000 | 0.000053 | 0.004428 | **Standard 82.9x faster** |
+| 1-10,000,000 | 0.000558 | 0.043910 | **Standard 78.7x faster** |
 
-*Benchmarks performed on Intel Core i9-12900K @ 3.2 GHz, single-threaded, compiled with -O3 -march=native*
+*Benchmarks performed on Intel processor with GCC 13.3.0, -O3 optimization, averaged over 5 runs*
 
-The performance advantage is achieved through:
-- Advanced sieve-frame techniques with golden ratio filtering
-- Optimized one-shot memory allocation and tight processing loops
-- Efficient bit-sweep operations that outperform segmented Eratosthenes
-- Superior throughput characteristics for mid-sized ranges (≤ 10⁹)
+**Key Findings:**
+- **Overall**: Standard primesieve is **37x faster on average**
+- **Small ranges (≤1K)**: Z Framework shows minor performance advantage
+- **Medium to large ranges**: Standard primesieve demonstrates dramatic superiority
+- **Scalability**: Performance gap increases significantly with range size
+
+The analysis shows that while Z Framework demonstrates interesting mathematical concepts, it is **not a performance replacement** for standard primesieve. The framework is better suited for educational purposes and algorithm experimentation.
 
 ### Parameter Effects
 
@@ -201,7 +205,7 @@ The performance advantage is achieved through:
 - φ² (2.618): Enhanced geometric filtering  
 - 2φ (3.236): Maximum density optimization
 
-**Note**: Golden ratio enhancements provide meaningful performance optimizations through improved geometric filtering.
+**Note**: Comprehensive performance testing shows that golden ratio enhancements provide minimal performance impact (< 2% variation). The mathematical concepts are interesting for educational purposes but do not provide meaningful optimization benefits over standard algorithms.
 
 ## Building and Testing
 
@@ -252,11 +256,26 @@ Z Framework functions follow standard C conventions:
 
 ## Limitations
 
-1. **Memory usage**: Higher memory consumption (1 byte per integer) vs primesieve's optimized memory usage
-2. **Single-threaded**: Each generator instance is single-threaded (multi-threading enhancements planned)
-3. **Range optimization**: Peak performance achieved on mid-sized ranges (≤ 10⁹)
-4. **Hardware dependency**: Performance gains may vary by CPU architecture and compiler optimization
-5. **Memory vs Speed trade-off**: Achieves speed through higher memory allocation
+1. **Performance**: Standard primesieve is significantly faster (37x average) for all but very small ranges
+2. **Scalability**: Performance degrades rapidly with increasing range size compared to primesieve
+3. **Memory usage**: Higher memory consumption (1 byte per integer) vs primesieve's optimized memory usage
+4. **Algorithm efficiency**: Uses basic sieve of Eratosthenes vs primesieve's optimized segmented sieve with SIMD
+5. **Single-threaded**: Each generator instance is single-threaded (multi-threading enhancements planned)
+6. **Educational focus**: Better suited for learning and experimentation rather than production use
+
+## Recommended Use Cases
+
+**Suitable for:**
+- Educational purposes and algorithm learning
+- Mathematical research and experimentation
+- Very small prime ranges (≤1,000 numbers)
+- Demonstrating alternative mathematical approaches
+
+**Not recommended for:**
+- Production applications requiring performance
+- Large-scale prime generation
+- Performance-critical computations
+- Replacement of standard primesieve
 
 ## Future Enhancements
 
@@ -274,4 +293,7 @@ Z Framework functions follow standard C conventions:
 
 ---
 
-*The Z Framework achieves significant performance improvements over traditional prime generation approaches, providing up to 25x faster execution for single-threaded workloads on mid-sized ranges through innovative sieve-frame techniques and golden ratio optimizations.*
+*The Z Framework demonstrates innovative mathematical concepts for prime generation through frame shift residue methods and golden ratio transformations. While not a performance replacement for standard primesieve, it serves as an educational implementation exploring alternative mathematical approaches to prime sieving algorithms. For production use, standard primesieve remains the recommended choice due to its superior performance optimization.*
+
+**🔗 Related Documentation:**
+- [Comprehensive Performance Report](ZFRAMEWORK_PERFORMANCE_REPORT.md) - Detailed benchmark analysis and findings
