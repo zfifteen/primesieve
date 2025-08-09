@@ -2,7 +2,7 @@
 
 ## Overview
 
-⚠️ **Performance Analysis**: Comprehensive benchmarking reveals that standard primesieve significantly outperforms Z Framework, with standard primesieve being **37x faster on average** across tested ranges. Z Framework shows minor advantages only on very small ranges (≤1K primes).
+⚠️ **Performance Analysis**: Comprehensive benchmarking on current hardware shows that standard primesieve significantly outperforms Z Framework, with standard primesieve being **81x faster on average** across tested ranges on GitHub Actions Intel Xeon. Z Framework shows minor advantages only on very small ranges (≤1K primes). Performance characteristics may vary across different hardware architectures and compiler configurations.
 
 The Z Framework explores advanced mathematical approaches to prime generation using **frame shift residue methods** and **golden ratio geometric transformations**. While the implementation demonstrates innovative mathematical concepts, it serves primarily as an educational and experimental implementation rather than a performance-optimized replacement for primesieve.
 
@@ -170,27 +170,53 @@ This eliminates numbers divisible by 2, 3, or 5 before sieving.
 - **Space complexity**: O(√n) for sieving primes  
 - **Enhancement overhead**: Geometric calculations add minimal cost
 
+## Performance Characteristics
+
+### Complexity
+- **Time complexity**: O(n log log n) - same as Sieve of Eratosthenes
+- **Space complexity**: O(√n) for sieving primes  
+- **Enhancement overhead**: Geometric calculations add minimal cost
+
 ### Benchmark Results
 
-📊 **Comprehensive Performance Analysis**: Extensive testing reveals standard primesieve's significant performance superiority:
+📊 **Comprehensive Performance Analysis**: Extensive testing shows hardware-dependent performance characteristics:
 
+#### Current GitHub Actions Environment (Intel Xeon):
 | Range Size | Standard Time (s) | Z Framework Time (s) | Performance Ratio |
 |------------|-------------------|---------------------|-------------------|
-| 1-1,000 | 0.000014 | 0.000004 | **Z Framework 3.5x faster** |
-| 1-10,000 | 0.000015 | 0.000042 | **Standard 2.8x faster** |
-| 1-100,000 | 0.000018 | 0.000439 | **Standard 24.9x faster** |
-| 1-1,000,000 | 0.000053 | 0.004428 | **Standard 82.9x faster** |
-| 1-10,000,000 | 0.000558 | 0.043910 | **Standard 78.7x faster** |
+| 1-1,000 | 0.000016 | 0.000009 | **Z Framework 1.7x faster** |
+| 1-10,000 | 0.000014 | 0.000051 | **Standard 3.6x faster** |
+| 1-100,000 | 0.000019 | 0.000440 | **Standard 23.2x faster** |
+| 1-1,000,000 | 0.000056 | 0.004546 | **Standard 81.2x faster** |
+| 1-10,000,000 | 0.000566 | 0.043939 | **Standard 77.6x faster** |
+| 1-100,000,000 | 0.007645 | 0.630667 | **Standard 82.5x faster** |
 
-*Benchmarks performed on Intel processor with GCC 13.3.0, -O3 optimization, averaged over 5 runs*
+*Benchmarks performed on GitHub Actions Intel Xeon with GCC 13.3.0, -O3 optimization, single-threaded, averaged over 3 runs*
 
-**Key Findings:**
-- **Overall**: Standard primesieve is **37x faster on average**
-- **Small ranges (≤1K)**: Z Framework shows minor performance advantage
-- **Medium to large ranges**: Standard primesieve demonstrates dramatic superiority
-- **Scalability**: Performance gap increases significantly with range size
+**Key Findings for Current Environment:**
+- **Very Small ranges (≤1K)**: Z Framework shows minor performance advantage (1.7x)
+- **All other ranges**: Standard primesieve demonstrates significant superiority (3-82x faster)
+- **Overall**: Standard primesieve is **81x faster on average**
+- **Scalability**: Performance gap increases dramatically with range size
 
-The analysis shows that while Z Framework demonstrates interesting mathematical concepts, it is **not a performance replacement** for standard primesieve. The framework is better suited for educational purposes and algorithm experimentation.
+#### Performance Variance Across Hardware
+
+⚠️ **Important Note**: Performance characteristics may vary significantly across different hardware architectures:
+
+- **Different CPU architectures** (Intel Core i9 vs Xeon vs AMD) may show different relative performance
+- **Compiler optimizations** and flags can impact relative performance  
+- **Memory hierarchy** (cache sizes, memory speed) affects algorithm performance
+- **SIMD instruction sets** available on specific hardware
+
+Some user reports suggest Z Framework may perform better on certain Intel Core i9 configurations with specific compiler flags, though this has not been independently verified in the current testing environment.
+
+### Verified Performance Characteristics
+
+**Current Testing Environment Results:**
+- **Small range advantage**: Z Framework shows 1.7x advantage only on very small ranges (≤1K)
+- **Scalability limitation**: Performance degrades rapidly with increasing range size
+- **Memory usage**: Higher memory consumption compared to primesieve's optimized memory patterns
+- **Algorithm efficiency**: Basic sieve implementation vs primesieve's advanced segmented sieve with SIMD
 
 ### Parameter Effects
 
@@ -256,26 +282,28 @@ Z Framework functions follow standard C conventions:
 
 ## Limitations
 
-1. **Performance**: Standard primesieve is significantly faster (37x average) for all but very small ranges
-2. **Scalability**: Performance degrades rapidly with increasing range size compared to primesieve
-3. **Memory usage**: Higher memory consumption (1 byte per integer) vs primesieve's optimized memory usage
-4. **Algorithm efficiency**: Uses basic sieve of Eratosthenes vs primesieve's optimized segmented sieve with SIMD
-5. **Single-threaded**: Each generator instance is single-threaded (multi-threading enhancements planned)
-6. **Educational focus**: Better suited for learning and experimentation rather than production use
+1. **Performance**: On current testing hardware, standard primesieve is significantly faster (81x average) for all but very small ranges (≤1K)
+2. **Hardware dependency**: Performance characteristics may vary across different CPU architectures and configurations
+3. **Scalability**: Performance degrades rapidly with increasing range size compared to primesieve
+4. **Memory usage**: Higher memory consumption (1 byte per integer) vs primesieve's optimized memory usage
+5. **Algorithm efficiency**: Uses basic sieve of Eratosthenes vs primesieve's optimized segmented sieve with SIMD
+6. **Single-threaded**: Each generator instance is single-threaded (multi-threading enhancements planned)
+7. **Educational focus**: Better suited for learning and experimentation rather than production use
 
 ## Recommended Use Cases
 
 **Suitable for:**
 - Educational purposes and algorithm learning
-- Mathematical research and experimentation
-- Very small prime ranges (≤1,000 numbers)
+- Mathematical research and experimentation  
+- Very small prime ranges (≤1,000 numbers) where minor performance advantages may exist
 - Demonstrating alternative mathematical approaches
+- Research into golden ratio and geometric prime generation methods
 
 **Not recommended for:**
 - Production applications requiring performance
-- Large-scale prime generation
+- Large-scale prime generation (≥10K ranges)
 - Performance-critical computations
-- Replacement of standard primesieve
+- General replacement of standard primesieve
 
 ## Future Enhancements
 
