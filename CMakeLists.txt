@@ -79,7 +79,8 @@ set(LIB_SRC src/api-c.cpp
             src/PreSieve.cpp
             src/PrimeSieveClass.cpp
             src/RiemannR.cpp
-            src/SievingPrimes.cpp)
+            src/SievingPrimes.cpp
+            src/zframework.cpp)
 
 # Check if compiler supports CPU multiarch ###########################
 
